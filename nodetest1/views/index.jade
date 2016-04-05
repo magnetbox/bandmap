@@ -1,0 +1,42 @@
+extends layout
+
+block content
+	div.container
+		div.col-sm-offset-2
+			h1= title
+		form.form-horizontal(name="addalbum",method="post",action="/addalbum",role="form")
+			div.form-group
+				label.col-sm-2.control-label(for="inputBandName") Band name
+				div.col-sm-8
+					input.form-control.col-sm-8.typeahead#inputBandName(type="text", autocomplete="off", name="bandname", autofocus=true)
+			div.form-group
+				label.col-sm-2.control-label(for="inputBandLocation") Band location
+				div.col-sm-8
+					input.form-control.typeahead#inputBandLocation(type="text", autocomplete="off", name="bandlocation")
+					input.form-control.typeahead#inputBandLatitude(type="hidden", autocomplete="off", name="bandlatitude", value="")
+					input.form-control.typeahead#inputBandLongitude(type="hidden", autocomplete="off", name="bandlongitude", value="")
+			div.form-group
+				label.col-sm-2.control-label(for="inputAlbumName") Album name
+				div.col-sm-8
+					input.form-control.typeahead#inputAlbumName(type="text", autocomplete="off", name="albumname")
+			div.form-group
+				label.col-sm-2.control-label(for="inputAlbumYear") Album year
+				div.col-sm-8
+					input.form-control.typeahead#inputAlbumYear(type="text", autocomplete="off", name="albumyear")
+			div.form-group
+				label.col-sm-2.control-label(for="inputAlbumMonth") Album month
+				div.col-sm-8
+					input.form-control.typeahead#inputAlbumMonth(type="text", autocomplete="off", name="albummonth")
+			div.form-group
+				label.col-sm-2.control-label(for="inputAlbumSales") Album sales
+				div.col-sm-8
+					input.form-control.typeahead#inputAlbumSales(type="text", autocomplete="off", name="albumsales")
+			div.form-group
+				label.col-sm-2.control-label(for="inputAlbumLocation") Album location
+				div.col-sm-8
+					input.form-control.typeahead#inputAlbumLocation(type="text", autocomplete="off", name="albumlocation")
+					input.form-control.typeahead#inputAlbumLatitude(type="hidden", autocomplete="off", name="albumlatitude", value="")
+					input.form-control.typeahead#inputAlbumLongitude(type="hidden", autocomplete="off", name="albumlongitude", value="")
+			div.form-group
+				div.col-sm-offset-2.col-sm-8
+					button.btn.btn-default#btnSubmit(type="submit") Submit

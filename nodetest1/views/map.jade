@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/typeaheadjs.css')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src='/javascripts/typeahead.bundle.js')
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDuhnB6YLxxQ6U-VDRMawoo_khpV9aBPG8&sensor=false')
+    script(src='/javascripts/map.js')
+  body
+    block content
+      div#map-canvas

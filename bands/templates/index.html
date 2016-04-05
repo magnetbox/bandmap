@@ -1,0 +1,113 @@
+{% load staticfiles %}
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script src="{% static 'leaflet-providers/leaflet-providers.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/Label.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/BaseMarkerMethods.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/Marker.Label.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/CircleMarker.Label.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/Path.Label.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/Map.Label.js' %}"></script>
+<script src="{% static 'Leaflet.label/src/FeatureGroup.Label.js' %}"></script>
+<style>
+#map { height: 100%; }
+.map_popup { font-family: Georgia, serif; padding: 1em; background-color: #FFF; }
+.map_popup {
+	min-width: 300px; 
+	-webkit-border-radius: 5px;
+	-webkit-border-top-left-radius: 0;
+	-moz-border-radius: 5px;
+	-moz-border-radius-topleft: 0;
+	border-radius: 5px;
+	border-top-left-radius: 0;
+}
+.map_popup table { margin-bottom: 0; }
+.borderless tr, .borderless td, .borderless th { border: none; }
+</style>
+</head>
+<body>
+
+	<div id="year"><form action="/" method="GET"><select name="year">
+		{% for year in years %}
+		<option value="{{ year }}">{{ year }}</option>
+		{% endfor %}
+	</select><input type="submit" value="Go"></form></div>
+	<div id="map"></div>
+	<p>{{ albums }}</p>
+
+<script>
+
+var map = L.map('map').setView([51.505, -0.09], 2);
+
+// L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+// L.tileLayer.provider('Stamen.Toner').addTo(map);
+L.tileLayer.provider('Stamen.Watercolor').addTo(map);
+
+var circles = new Array();
+var defaultZoomLevel = 3;
+var defaultBoundsLevel = 5;
+var defaultCircleRadius = 1200;
+
+var albums = {{ albums|safe }};
+
+function create_popup(topic) {
+  return '<div class="map_popup">' + 
+  	'<table class="table borderless">' + 
+  	'<tr><th>Artist</th><td>'+topic.band.name+'</td></tr>' + 
+  	'<tr><th>Album</th><td>'+topic.name+'</td></tr>' +
+  	'<tr><th>Year</th><td>'+topic.year+'</td></tr>' +
+  	'<tr><th>Sales</th><td>'+topic.sales+'</td></tr>' +
+  	'</table></div>'
+}
+
+function create_circle(topic, importance, time, section) {
+  var color = '#F9421D';
+  var fillOpacity = 0.7;
+
+  var options = {
+    fillColor: color,
+    fillOpacity: fillOpacity,
+    stroke: false
+  }
+	var latitude = topic.band.location.latitude;
+	var longitude = topic.band.location.longitude;
+	if (topic.location != null) {
+		latitude = topic.location.latitude
+		longitude = topic.location.longitude
+	}
+  return L.circle([latitude, longitude], importance, options).on('click', function () { goto_topic(topic) })
+}
+
+addItems = function(e, data) {
+	console.log(albums);
+  for(var j=0;j<albums.length;j++){
+  	console.log(albums[j].band.name,"/",albums[j].name)
+  	var latitude = albums[j].band.location.latitude;
+  	var longitude = albums[j].band.location.longitude;
+    if (albums[j].location != null) {
+    	latitude = albums[j].location.latitude
+    	longitude = albums[j].location.longitude
+    }
+      var circle = null;
+      var importance_factor = 0;
+      var importance_value = 0;
+      importance_factor = defaultCircleRadius*(albums[j].sales+1)
+      importance_value = Math.round(importance_factor/Math.pow(2,this.map.getZoom()));
+      circle = create_circle(albums[j], importance_value)
+      circle.bindLabel(create_popup(albums[j]))
+      circle.addTo(this.map)
+      circles.push({
+        'circle': circle,
+        'radius': importance_factor,
+        'coords': [latitude,longitude]
+      })
+  }
+}
+addItems();
+
+</script>
+</body>
+</html>
