@@ -5,7 +5,7 @@ import logging
 import json
 
 YEAR_CHOICES = []
-for r in range(1955, 2013):
+for r in range(1955, 2015):
     YEAR_CHOICES.append(r)
 
 def index(request):

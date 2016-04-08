@@ -10,9 +10,11 @@ class LocationAdmin(admin.ModelAdmin):
 
 class BandAdmin(admin.ModelAdmin):
     list_display = ('name', 'location')
+    raw_id_fields = ('location',)
 
 class AlbumAdmin(admin.ModelAdmin):
     list_display = ('name', 'band', 'year', 'sales', 'location')
+    raw_id_fields = ('location',)
 
 admin.site.register(Band, BandAdmin)
 admin.site.register(Location, LocationAdmin)

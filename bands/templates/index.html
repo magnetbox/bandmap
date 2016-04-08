@@ -13,7 +13,7 @@
 <script src="{% static 'Leaflet.label/src/Map.Label.js' %}"></script>
 <script src="{% static 'Leaflet.label/src/FeatureGroup.Label.js' %}"></script>
 <style>
-#map { height: 100%; }
+#map { height: 500px; }
 .map_popup { font-family: Georgia, serif; padding: 1em; background-color: #FFF; }
 .map_popup {
 	min-width: 300px; 
@@ -63,6 +63,14 @@ function create_popup(topic) {
   	'</table></div>'
 }
 
+function create_coords(location) {
+  var n = location.match(/\(([^()]+)\)/g)[0];
+  n = n.replace("(","");
+  n = n.replace(")","");
+  n = n.split(" ");
+  return n;
+}
+
 function create_circle(topic, importance, time, section) {
   var color = '#F9421D';
   var fillOpacity = 0.7;
@@ -72,25 +80,24 @@ function create_circle(topic, importance, time, section) {
     fillOpacity: fillOpacity,
     stroke: false
   }
-	var latitude = topic.band.location.latitude;
-	var longitude = topic.band.location.longitude;
+	var loc = topic.band.location.location;
 	if (topic.location != null) {
-		latitude = topic.location.latitude
-		longitude = topic.location.longitude
+		loc = topic.location.location
 	}
-  return L.circle([latitude, longitude], importance, options).on('click', function () { goto_topic(topic) })
+  var n = create_coords(loc);
+  console.log(n)
+  return L.circle([n[1], n[0]], importance, options).on('click', function () { goto_topic(topic) })
 }
 
 addItems = function(e, data) {
 	console.log(albums);
   for(var j=0;j<albums.length;j++){
   	console.log(albums[j].band.name,"/",albums[j].name)
-  	var latitude = albums[j].band.location.latitude;
-  	var longitude = albums[j].band.location.longitude;
+    var loc = albums[j].band.location.location;
     if (albums[j].location != null) {
-    	latitude = albums[j].location.latitude
-    	longitude = albums[j].location.longitude
+      loc = albums[j].location.location
     }
+    var n = create_coords(loc);
       var circle = null;
       var importance_factor = 0;
       var importance_value = 0;
@@ -102,7 +109,7 @@ addItems = function(e, data) {
       circles.push({
         'circle': circle,
         'radius': importance_factor,
-        'coords': [latitude,longitude]
+        'coords': [n[1],n[0]]
       })
   }
 }

@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 import datetime
+from cities.models import Place, Country, City
 
 class Location(models.Model):
     name = models.CharField(max_length=400)
@@ -19,7 +20,7 @@ class Location(models.Model):
 
 class Band(models.Model):
     name = models.CharField(max_length=400)
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(City, null=True, blank=True)
 
     class Meta:
         ordering = ['name']
@@ -31,7 +32,7 @@ class Album(models.Model):
     name = models.CharField(max_length=400)
     year = models.IntegerField()
     sales = models.IntegerField()
-    location = models.ForeignKey(Location, null=True, blank=True)
+    location = models.ForeignKey(City, null=True, blank=True)
     band = models.ForeignKey(Band)
 
     class Meta:
@@ -42,7 +43,7 @@ class Album(models.Model):
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Location
+        model = City
         # fields = ('name','latitude','longitude')
 
 class BandSerializer(serializers.ModelSerializer):
