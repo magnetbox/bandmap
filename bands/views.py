@@ -17,5 +17,5 @@ def index(request):
 		albums = Album.objects.all()
 	serializer = AlbumSerializer(instance=albums, many=True)
 	json_data = json.dumps(serializer.data)
-	return render(request, 'index.html', {'years': YEAR_CHOICES, 'albums': json_data})
+	return render(request, 'index.html', {'years': YEAR_CHOICES, 'yearquery': year_query, 'albums': json_data})
 
