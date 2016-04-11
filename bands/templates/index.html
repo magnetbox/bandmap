@@ -36,7 +36,13 @@
 		{% endfor %}
 	</select><input type="submit" value="Go"></form></div>
 	<div id="map"></div>
-	<p>{{ albums }}</p>
+  <table class="table">
+    <tr><th>Artist</th><th>Album</th><th>Year</th><th>Sales</th></tr>
+	{% for album in albums_objects %}
+    <tr><td>{{ album.band.name }}</td><td>{{ album.name }}</td><td>{{ album.year }}</td><td>{{ album.sales }}</td></tr>
+  {% endfor %}
+  </table>
+
 
 <script>
 
