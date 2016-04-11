@@ -86,10 +86,12 @@ function create_circle(topic, importance, time, section) {
     fillOpacity: fillOpacity,
     stroke: false
   }
-	var loc = topic.band.location.location;
+  var loc;
 	if (topic.location != null) {
-		loc = topic.location.location
-	}
+		loc = topic.location.location;
+	} else {
+    loc = topic.band.location.location;
+  }
   var n = create_coords(loc);
   return L.circle([n[1], n[0]], importance, options).on('click', function () { goto_topic(topic) })
 }
@@ -98,16 +100,18 @@ addItems = function(e, data) {
 	// console.log(albums);
   for(var j=0;j<albums.length;j++){
   	// console.log(albums[j].band.name,"/",albums[j].name)
-    var loc = albums[j].band.location.location;
+    var loc;
     if (albums[j].location != null) {
-      loc = albums[j].location.location
+      loc = albums[j].location.location;
+    } else {
+      loc = albums[j].band.location.location;
     }
     var n = create_coords(loc);
       var circle = null;
       var importance_factor = 0;
       var importance_value = 0;
       importance_factor = defaultCircleRadius*(albums[j].sales+1)
-      importance_value = Math.round(importance_factor/Math.pow(2,this.map.getZoom()));
+      importance_value = Math.round(importance_factor/Math.pow(2,map.getZoom()));
       circle = create_circle(albums[j], importance_value)
       circle.bindLabel(create_popup(albums[j]))
       circle.addTo(this.map)
@@ -118,6 +122,14 @@ addItems = function(e, data) {
       })
   }
 }
+
+resizeItems = function() {
+  var zoom_level = map.getZoom()
+  for(var i=0; i<circles.length; i++){
+    circles[i].circle.setRadius(Math.round(circles[i].radius/Math.pow(2,zoom_level)))
+  }
+}
+map.on('zoomend', resizeItems)
 addItems();
 
 </script>
