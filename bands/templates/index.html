@@ -57,7 +57,8 @@ L.tileLayer.provider('Stamen.Watercolor').addTo(map);
 var circles = new Array();
 var defaultZoomLevel = 3;
 var defaultBoundsLevel = 5;
-var defaultCircleRadius = 1200;
+var defaultCircleRadius = 1200000;
+var defaultOpacity = 0.1;
 
 var albums = {{ albums|safe }};
 
@@ -79,13 +80,13 @@ function create_coords(location) {
   return n;
 }
 
-function create_circle(topic, importance, time, section) {
-  var color = '#F9421D';
+function create_circle(topic, opacity, size) {
+  var color = '#000000';
   var fillOpacity = 0.7;
 
   var options = {
     fillColor: color,
-    fillOpacity: fillOpacity,
+    fillOpacity: opacity,
     stroke: false
   }
   var loc;
@@ -95,7 +96,7 @@ function create_circle(topic, importance, time, section) {
     loc = topic.band.location.location;
   }
   var n = create_coords(loc);
-  return L.circle([n[1], n[0]], importance, options).on('click', function () { goto_topic(topic) })
+  return L.circle([n[1], n[0]], size, options).on('click', function () { goto_topic(topic) })
 }
 
 addItems = function(e, data) {
@@ -110,16 +111,46 @@ addItems = function(e, data) {
     }
     var n = create_coords(loc);
       var circle = null;
-      var importance_factor = 0;
       var importance_value = 0;
-      importance_factor = defaultCircleRadius*(albums[j].sales+1)
-      importance_value = Math.round(importance_factor/Math.pow(2,map.getZoom()));
-      circle = create_circle(albums[j], importance_value)
+      var importance_factor = albums[j].sales;
+      if (importance_factor > 0) {
+        importance_value = 0.1;
+      }
+      if (importance_factor > 50) {
+        importance_value = 0.2;
+      }
+      if (importance_factor > 600) {
+        importance_value = 0.3;
+      }
+      if (importance_factor > 1150) {
+        importance_value = 0.4;
+      }
+      if (importance_factor > 1700) {
+        importance_value = 0.5;
+      }
+      if (importance_factor > 2250) {
+        importance_value = 0.6;
+      }
+      if (importance_factor > 2800) {
+        importance_value = 0.7;
+      }
+      if (importance_factor > 3350) {
+        importance_value = 0.8;
+      }
+      if (importance_factor > 3900) {
+        importance_value = 0.9;
+      }
+      if (importance_factor > 4450) {
+        importance_value = 1.0;
+      }
+      console.log(importance_value)
+      var size = Math.round(defaultCircleRadius/Math.pow(2,map.getZoom()));
+      circle = create_circle(albums[j], importance_value, size)
       circle.bindLabel(create_popup(albums[j]))
       circle.addTo(this.map)
       circles.push({
         'circle': circle,
-        'radius': importance_factor,
+        'radius': size,
         'coords': [n[1],n[0]]
       })
   }
@@ -128,7 +159,7 @@ addItems = function(e, data) {
 resizeItems = function() {
   var zoom_level = map.getZoom()
   for(var i=0; i<circles.length; i++){
-    circles[i].circle.setRadius(Math.round(circles[i].radius/Math.pow(2,zoom_level)))
+    circles[i].circle.setRadius(Math.round(defaultCircleRadius/Math.pow(2,zoom_level)))
   }
 }
 map.on('zoomend', resizeItems)

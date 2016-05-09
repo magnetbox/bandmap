@@ -36,7 +36,7 @@ class Album(models.Model):
     band = models.ForeignKey(Band)
 
     class Meta:
-        ordering = ['year','-sales']
+        ordering = ['year','sales']
 
     def __str__(self):
         return self.name
