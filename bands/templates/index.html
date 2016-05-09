@@ -13,7 +13,8 @@
 <script src="{% static 'Leaflet.label/src/Map.Label.js' %}"></script>
 <script src="{% static 'Leaflet.label/src/FeatureGroup.Label.js' %}"></script>
 <style>
-#map { height: 500px; }
+body { margin: 1em; }
+#map { height: 400px; }
 .map_popup { font-family: Georgia, serif; padding: 1em; background-color: #FFF; }
 .map_popup {
 	min-width: 300px; 
@@ -36,6 +37,7 @@
 		{% endfor %}
 	</select><input type="submit" value="Go"></form></div>
 	<div id="map"></div>
+  <br />
   <table class="table">
     <tr><th>Artist</th><th>Album</th><th>Year</th><th>Sales</th></tr>
 	{% for album in albums_objects %}
@@ -46,7 +48,7 @@
 
 <script>
 
-var map = L.map('map').setView([20.0, 0], 2);
+var map = L.map('map', { scrollWheelZoom: false }).setView([20.0, 0], 2);
 
 // L.tileLayer.provider('Stamen.TonerLite').addTo(map);
 // L.tileLayer.provider('Stamen.Toner').addTo(map);
