@@ -29,11 +29,11 @@ class Band(models.Model):
         return self.name
 
 class Album(models.Model):
-    name = models.CharField(max_length=400)
     year = models.IntegerField()
+    name = models.CharField(max_length=400)
+    band = models.ForeignKey(Band)
     sales = models.IntegerField()
     location = models.ForeignKey(City, null=True, blank=True)
-    band = models.ForeignKey(Band)
 
     class Meta:
         ordering = ['year','sales']
