@@ -12,10 +12,11 @@ def index(request):
 	data = []
 	year_query = request.GET.get('year', None)
 	if year_query:
+		year_query = int(year_query)
 		albums = Album.objects.filter(year=year_query).all()
 	else:
 		albums = Album.objects.all()
 	serializer = AlbumSerializer(instance=albums, many=True)
 	json_data = json.dumps(serializer.data)
-	return render(request, 'index.html', {'years': YEAR_CHOICES, 'yearquery': year_query, 'albums': json_data, 'albums_objects': albums})
+	return render(request, 'index.html', {'years': YEAR_CHOICES, 'year_query': year_query, 'albums': json_data, 'albums_objects': albums})
 

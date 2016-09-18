@@ -33,7 +33,7 @@ body { margin: 1em; }
 
 	<div id="year"><form action="/" method="GET"><select name="year">
 		{% for year in years %}
-		<option value="{{ year }}"{% if year == yearquery %} selected="selected"{% endif %}>{{ year }}</option>
+		<option value="{{ year }}"{% if year == year_query %} selected="selected"{% endif %}>{{ year }}</option>
 		{% endfor %}
 	</select><input type="submit" value="Go"></form></div>
 	<div id="map"></div>

@@ -36,7 +36,7 @@ class Album(models.Model):
     location = models.ForeignKey(City, null=True, blank=True)
 
     class Meta:
-        ordering = ['year','sales']
+        ordering = ['year','-sales']
 
     def __str__(self):
         return self.name
